@@ -110,33 +110,28 @@ app.post("/run-workflow", async (req, res) => {
   try {
     switch (action) {
       case "weather":
-        api_response = await getWeather();
         ai_response = await getAiResponse(
-          `${prompt}
-            Weather data: ${api_response}
-            Write a short tweet-style response using this real data.`
+          `${prompt}\n\nWeather data: ${api_response}\n\nWrite a short, tweet-style summary of this. Do NOT include hashtags. Keep it crisp.`
         );
-        final_result = `${ai_response} #weather`;
-        break;
 
-      case "github":
-        api_response = await getTrendingRepo();
-        ai_response = await getAiResponse(
-          `${prompt}
-            Trending GitHub repos: ${api_response}
-            Summarize this in a short tweet-like update.`
-        );
-        final_result = `${ai_response} #github`;
+        final_result = `${ai_response} (Data: ${api_response}) #${action}`;
+
         break;
 
       case "news":
         api_response = await getNews();
         ai_response = await getAiResponse(
-          `${prompt}
-            Top news headlines: ${api_response}
-            Summarize in a short tweet-like style.`
+          `${prompt}\n\nTop news headlines: ${api_response}\n\nWrite a concise tweet-style summary highlighting the key updates. Do NOT include hashtags. Keep it crisp.`
         );
-        final_result = `${ai_response} #news`;
+        final_result = `${ai_response} (Headlines: ${api_response}) #${action}`;
+        break;
+
+      case "github":
+        api_response = await getGithubTrending();
+        ai_response = await getAiResponse(
+          `${prompt}\n\nTrending GitHub repos: ${api_response}\n\nWrite a catchy tweet-style update about these repos. Do NOT include hashtags. Keep it crisp.`
+        );
+        final_result = `${ai_response} (Repos: ${api_response}) #${action}`;
         break;
 
       default:
