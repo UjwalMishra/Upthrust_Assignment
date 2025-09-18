@@ -9,13 +9,18 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+const allowedOrigin = process.env.FRONTEND_URL || "*";
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL,
+  origin: allowedOrigin,
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
