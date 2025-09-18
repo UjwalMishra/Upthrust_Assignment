@@ -110,6 +110,7 @@ app.post("/run-workflow", async (req, res) => {
   try {
     switch (action) {
       case "weather":
+        api_response = await getWeather();
         ai_response = await getAiResponse(
           `${prompt}\n\nWeather data: ${api_response}\n\nWrite a short, tweet-style summary of this. Do NOT include hashtags. Keep it crisp.`
         );
@@ -127,7 +128,7 @@ app.post("/run-workflow", async (req, res) => {
         break;
 
       case "github":
-        api_response = await getGithubTrending();
+        api_response = await getTrendingRepo();
         ai_response = await getAiResponse(
           `${prompt}\n\nTrending GitHub repos: ${api_response}\n\nWrite a catchy tweet-style update about these repos. Do NOT include hashtags. Keep it crisp.`
         );
@@ -137,10 +138,6 @@ app.post("/run-workflow", async (req, res) => {
       default:
         return res.status(400).json({ error: "Invalid action specified." });
     }
-
-    console.log("AI : ", ai_response);
-    console.log("API : ", api_response);
-    console.log("final : ", final_result);
 
     return res.status(200).json({
       ai_response,
