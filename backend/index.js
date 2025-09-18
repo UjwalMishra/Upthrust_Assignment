@@ -20,7 +20,7 @@ const corsOptions = {
 console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options("/*", cors(corsOptions));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
